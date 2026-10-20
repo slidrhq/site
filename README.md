@@ -28,3 +28,9 @@ python -m http.server 1488   # from this folder, then open http://localhost:1488
 The site has no build and no checks. Publish the repository as it is, to any static host.
 
 Until 2026-10-20 the site was `apps/website` of [slidrhq/app](https://github.com/slidrhq/app); its history came with it. "The app" and "the dev server" above are that repository and its `pnpm dev`.
+
+## Publishing
+
+The site runs on Cloudflare as the Worker `slidr-site`, which serves the files of this repository (`wrangler.jsonc`; `.assetsignore` leaves out the rest). `.github/workflows/deploy.yml` publishes it on every push to `main`, and you can run it by hand from the Actions tab. The workflow needs two repository secrets: `CLOUDFLARE_API_TOKEN`, a token with the "Edit Cloudflare Workers" template, and `CLOUDFLARE_ACCOUNT_ID`.
+
+To publish from your own machine: `npx wrangler login`, then `npx wrangler deploy`.
