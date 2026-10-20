@@ -11,7 +11,7 @@ python -m http.server 1488   # from this folder, then open http://localhost:1488
 - `index.html` holds the page in English. Every text carries a `data-i18n` key.
 - `assets/i18n/<code>.js` holds the text of each language, translated from `en.js`; a new key goes into every file.
 - `assets/site.js` switches languages (direction and the fonts of each script with it), runs the scroll animations, the clip player, the wall of designs and the library's counts.
-- `assets/designs.js` lists the designs of Elements the page shows (from the app, `apps/desktop/src/elements/designs.ts`), in the columns of the library's wall and of the wall behind the hero.
+- `assets/designs.js` lists the designs of Elements the page shows (from the app, `desktop/src/elements/designs.ts`), in the columns of the library's wall and of the wall behind the hero.
 
 ## Media
 

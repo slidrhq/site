@@ -1,4 +1,4 @@
-// The designs of Elements on the page (apps/desktop/src/elements/designs.ts), in the columns they
+// The designs of Elements on the page (desktop/src/elements/designs.ts), in the columns they
 // drift in: six on the library's wall and five behind the hero. Each is drawn in
 // `media/designs/<he|en>/<id>.webp`; a design added here needs its two pictures there.
 window.SLIDR_DESIGNS = {
