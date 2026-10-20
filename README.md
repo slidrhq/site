@@ -31,6 +31,6 @@ Until 2026-10-20 the site was `apps/website` of [slidrhq/app](https://github.com
 
 ## Publishing
 
-The site runs on Cloudflare as the Worker `slidr-site`, which serves the files of this repository (`wrangler.jsonc`; `.assetsignore` leaves out the rest). `.github/workflows/deploy.yml` publishes it on every push to `main`, and you can run it by hand from the Actions tab. The workflow needs two repository secrets: `CLOUDFLARE_API_TOKEN`, a token with the "Edit Cloudflare Workers" template, and `CLOUDFLARE_ACCOUNT_ID`.
+The site runs on Cloudflare as the Worker `www` (https://www.slidr.workers.dev), which serves the files of this repository (`wrangler.jsonc`; `.assetsignore` leaves out the rest). `.github/workflows/deploy.yml` publishes it on every push to `main`, and you can run it by hand from the Actions tab. The workflow needs two repository secrets: `CLOUDFLARE_API_TOKEN`, a token with the "Edit Cloudflare Workers" template, and `CLOUDFLARE_ACCOUNT_ID`.
 
 To publish from your own machine: `npx wrangler login`, then `npx wrangler deploy`.
