@@ -25,6 +25,7 @@ python -m http.server 1488   # from this folder, then open http://localhost:1488
 - `media/templates/` are thumbnails of the built-in templates.
 - `media/showcase/` are every sample slide of three library templates (Layla, Zohar, Mifgash) in Hebrew and English, drawn at 1920×1080 by the app's `/dev/review.html?src=library&t=<id>&lang=<he|en>&slide=<n>` and saved at 720 px. `assets/showcase.js` holds their names and taglines in every language (from the app) and the names of their slides (the library's `templates/catalog.json`).
 - `media/library/` are strips of real items of the media library: Lucide line icons, Fluent colour illustrations and stickers of the frames catalog. The counts on the page are rounded down with a plus (8,000+ icons, 10,000+ illustrations and emoji, 600+ frames and stickers, 300+ designs) so they stay true as the library grows; on 2026-10-18 the published library had about 8,000, 10,000, 680 and 336.
+- `media/og.jpg` is the picture a shared link shows (`og:image`, 1200×630): the published page's first screen with the hero on the Galilee request, captured in Edge at 1200×630 and twice the pixel density, the bar's links hidden, and scaled down to 1200×630. Facebook, LinkedIn and Reddit read `og:image` only as an absolute address, so it names `https://slidr.studio/`.
 
 The site has no build and no checks. Publish the repository as it is, to any static host.
 
