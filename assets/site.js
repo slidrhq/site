@@ -169,18 +169,12 @@
     ['fr', 'exhibition'], ['ru', 'm-chipfab'], ['zh-CN', 'myth'], ['it', 'm-pitch-cover-kelp-depth'],
     ['vi', 'yoga'], ['tr', 'theatre'], ['id', 'market'], ['pt-BR', 'summercamp'],
   ];
-  // "Hello" in each language, risen behind the pile when its slide lands.
-  const HELLO = {
-    en: 'Hello', he: 'שלום', ar: 'مرحبًا', de: 'Hallo', es: 'Hola', fr: 'Bonjour', it: 'Ciao', 'pt-BR': 'Olá',
-    ru: 'Привет', tr: 'Merhaba', vi: 'Xin chào', id: 'Halo', hi: 'नमस्ते', ja: 'こんにちは', ko: '안녕하세요', 'zh-CN': '你好',
-  };
   const SPARKS = ['#5eead4', '#a5b4fc', '#e9b8ff', '#ffd88a', '#ffffff'];
   const EVERY = 1700;
   const PILE = 7;
 
   const stage = document.querySelector('.lang-stage');
   const pile = stage.querySelector('.lang-pile');
-  const hello = stage.querySelector('.lang-hello');
   const wave = pile.querySelector('.lang-wave');
   const chips = document.querySelector('.lang-chips');
   stage.style.setProperty('--every', `${EVERY}ms`);
@@ -235,32 +229,6 @@
     } catch {
       return '';
     }
-  }
-
-  function greet(code) {
-    const old = [...hello.children];
-    const word = document.createElement('span');
-    word.lang = code;
-    word.dir = byCode[code].rtl ? 'rtl' : 'ltr';
-    word.textContent = HELLO[code];
-    hello.appendChild(word);
-    if (reduced) return old.forEach((w) => w.remove());
-    word.animate(
-      [
-        { opacity: 0, transform: 'translateY(38%) scale(0.94)', filter: 'blur(14px)' },
-        { opacity: 0.9, transform: 'none', filter: 'blur(0)' },
-      ],
-      { duration: 520, delay: 80, easing: 'cubic-bezier(0.2, 0.7, 0.1, 1)', fill: 'both' },
-    );
-    old.forEach((w) =>
-      w
-        .animate([{ opacity: 0.9 }, { opacity: 0, transform: 'translateY(-34%) scale(1.06)', filter: 'blur(14px)' }], {
-          duration: 260,
-          easing: 'ease-in',
-          fill: 'forwards',
-        })
-        .finished.then(() => w.remove(), () => w.remove()),
-    );
   }
 
   function light(code) {
@@ -364,7 +332,6 @@
       restack();
       card.classList.add('landed');
       if (color) stage.style.setProperty('--glow', color);
-      greet(code);
       light(code);
     };
     if (still || reduced) {
