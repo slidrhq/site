@@ -34,3 +34,5 @@ Until 2026-10-20 the site was `apps/website` of [slidrhq/app](https://github.com
 The site runs on Cloudflare as the Worker `www` (https://www.slidr.workers.dev), which serves the files of this repository (`wrangler.jsonc`; `.assetsignore` leaves out the rest). `.github/workflows/deploy.yml` publishes it on every push to `main`, and you can run it by hand from the Actions tab. The workflow needs two repository secrets: `CLOUDFLARE_API_TOKEN`, a token with the "Edit Cloudflare Workers" template, and `CLOUDFLARE_ACCOUNT_ID`.
 
 To publish from your own machine: `npx wrangler login`, then `npx wrangler deploy`.
+
+The download buttons link straight to the installer of the latest release of the app, not to its releases page. When a release of the app is published, the Site workflow of slidrhq/app (`.github/workflows/site.yml`) runs `node set-download.mjs <installer URL>`, commits and pushes here, and the push publishes the site. It pushes with a deploy key of this repository that has write access (`SITE_DEPLOY_KEY`, a secret of slidrhq/app): a push with the workflow's own token would not start the deploy.
