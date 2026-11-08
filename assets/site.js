@@ -175,7 +175,7 @@
     ru: 'Привет', tr: 'Merhaba', vi: 'Xin chào', id: 'Halo', hi: 'नमस्ते', ja: 'こんにちは', ko: '안녕하세요', 'zh-CN': '你好',
   };
   const SPARKS = ['#5eead4', '#a5b4fc', '#e9b8ff', '#ffd88a', '#ffffff'];
-  const EVERY = 2800;
+  const EVERY = 1700;
   const PILE = 7;
 
   const stage = document.querySelector('.lang-stage');
@@ -250,12 +250,12 @@
         { opacity: 0, transform: 'translateY(38%) scale(0.94)', filter: 'blur(14px)' },
         { opacity: 0.9, transform: 'none', filter: 'blur(0)' },
       ],
-      { duration: 800, delay: 140, easing: 'cubic-bezier(0.2, 0.7, 0.1, 1)', fill: 'both' },
+      { duration: 520, delay: 80, easing: 'cubic-bezier(0.2, 0.7, 0.1, 1)', fill: 'both' },
     );
     old.forEach((w) =>
       w
         .animate([{ opacity: 0.9 }, { opacity: 0, transform: 'translateY(-34%) scale(1.06)', filter: 'blur(14px)' }], {
-          duration: 380,
+          duration: 260,
           easing: 'ease-in',
           fill: 'forwards',
         })
@@ -278,6 +278,8 @@
     cards.forEach((c, k) => {
       const depth = cards.length - 1 - k;
       c.style.setProperty('--depth', depth);
+      // Each slide a little above the one under it, so the 3D pile keeps its order.
+      c.style.setProperty('--lift', `${(PILE + 1 - Math.min(depth, PILE)) * 2}px`);
       if (depth < PILE) return;
       c.classList.add('gone');
       c.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600, fill: 'forwards' }).finished.then(() => c.remove(), () => c.remove());
@@ -295,7 +297,7 @@
           { transform: `translate(${from.x * -0.012 * f}px, ${7 * f}px) rotate(${rand(-1.6, 1.6) * f}deg)` },
           { transform: 'none' },
         ],
-        { duration: 520, easing: 'cubic-bezier(0.2, 0.8, 0.3, 1)' },
+        { duration: 400, easing: 'cubic-bezier(0.2, 0.8, 0.3, 1)' },
       );
     });
     wave.animate(
@@ -303,7 +305,7 @@
         { opacity: 0.85, transform: 'scale(0.62)' },
         { opacity: 0, transform: 'scale(1.32)' },
       ],
-      { duration: 820, easing: 'cubic-bezier(0.1, 0.7, 0.2, 1)' },
+      { duration: 620, easing: 'cubic-bezier(0.1, 0.7, 0.2, 1)' },
     );
     const w = pile.clientWidth;
     const h = pile.clientHeight;
@@ -328,10 +330,10 @@
       const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
       s.animate(
         [
-          { transform: `translate(${x}px, ${y}px) rotate(${angle}deg) scale(1)`, opacity: 1 },
-          { transform: `translate(${x + dx}px, ${y + dy + 26}px) rotate(${angle}deg) scale(0.2)`, opacity: 0 },
+          { transform: `translate3d(${x}px, ${y}px, 40px) rotate(${angle}deg) scale(1)`, opacity: 1 },
+          { transform: `translate3d(${x + dx}px, ${y + dy}px, 18px) rotate(${angle}deg) scale(0.2)`, opacity: 0 },
         ],
-        { duration: rand(700, 1300), easing: 'cubic-bezier(0.15, 0.7, 0.3, 1)' },
+        { duration: rand(500, 900), easing: 'cubic-bezier(0.15, 0.7, 0.3, 1)' },
       ).finished.then(() => s.remove(), () => s.remove());
     }
   }
@@ -353,7 +355,9 @@
     tag.textContent = byCode[code].name;
     card.append(img, tag);
     // Where it comes to rest: a little off, a little turned.
-    card.style.translate = `${rand(-6, 6)}% ${rand(-6, 6)}%`;
+    card.style.setProperty('--x', `${rand(-6, 6)}%`);
+    card.style.setProperty('--y', `${rand(-6, 6)}%`);
+    card.style.setProperty('--lift', `${(PILE + 2) * 2}px`);
     card.style.rotate = `${rand(-9, 9)}deg`;
     pile.appendChild(card);
     const land = () => {
@@ -368,26 +372,26 @@
       if (!still) card.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300 });
       return;
     }
-    // Where it is thrown from: off the pile, from any side but straight below, turning in the air.
+    // Where it is thrown from: high above the table, off to a side or behind, turning in the air.
     const a = rand(-200, 20) * (Math.PI / 180);
-    const dist = stage.clientWidth * rand(0.85, 1.1);
+    const dist = stage.clientWidth * rand(0.55, 0.8);
     const from = { x: Math.cos(a) * dist, y: Math.sin(a) * dist * 0.75 };
     const spin = rand(22, 48) * (from.x > 0 ? 1 : -1);
     const tilt = `rotateX(${rand(18, 40)}deg) rotateY(${rand(14, 32) * (from.x > 0 ? -1 : 1)}deg)`;
-    const at = 0.62;
+    const at = 0.66;
     const fly = card.animate(
       [
-        { transform: `translate3d(${from.x}px, ${from.y}px, 280px) ${tilt} rotate(${spin}deg) scale(1.08)`, opacity: 0, filter: 'blur(6px) brightness(1.25)', easing: 'cubic-bezier(0.3, 0.1, 0.65, 1)' },
-        { opacity: 1, offset: 0.12 },
+        { transform: `translate3d(${from.x}px, ${from.y}px, 480px) ${tilt} rotate(${spin}deg)`, opacity: 0, filter: 'blur(5px) brightness(1.25)', easing: 'cubic-bezier(0.32, 0.02, 0.62, 0.95)' },
+        { opacity: 1, offset: 0.1 },
         { transform: 'translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotate(0deg) scale(0.955)', filter: 'blur(0px) brightness(1)', offset: at, easing: 'cubic-bezier(0.3, 1.4, 0.5, 1)' },
         { transform: 'translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotate(0deg) scale(1)', opacity: 1, filter: 'blur(0px) brightness(1)' },
       ],
-      { duration: 1050 },
+      { duration: 700 },
     );
     setTimeout(() => {
       land();
       impact(card, from);
-    }, 1050 * at);
+    }, 700 * at);
     await fly.finished.catch(() => {});
   }
 
@@ -417,9 +421,9 @@
           // The pile builds itself in a burst the first time it is seen, from the page's language.
           started = true;
           const first = Math.max(0, STACK.findIndex(([code]) => code === root.lang));
-          [0, 1, 2].forEach((k) => setTimeout(() => throwSlide((first + k) % STACK.length), 250 + k * 420));
+          [0, 1, 2].forEach((k) => setTimeout(() => throwSlide((first + k) % STACK.length), 200 + k * 260));
           next = (first + 3) % STACK.length;
-          throwOnBeat(250 + 2 * 420 + EVERY);
+          throwOnBeat(200 + 2 * 260 + EVERY);
           return;
         }
         throwOnBeat();
