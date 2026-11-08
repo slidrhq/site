@@ -1592,9 +1592,9 @@ p {
   width: 100%;
   max-width: 700px;
   justify-self: center;
-  aspect-ratio: 7 / 5;
+  aspect-ratio: 33 / 20;
   perspective: 1300px;
-  perspective-origin: 50% -47%;
+  perspective-origin: 50% -62%;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
@@ -1603,8 +1603,8 @@ p {
   position: absolute;
   left: 14%;
   right: 14%;
-  top: 30%;
-  height: 62%;
+  top: 29%;
+  height: 73%;
   border-radius: 50%;
   background-color: var(--glow);
   filter: blur(70px);
@@ -1612,12 +1612,14 @@ p {
   transition: background-color 1.2s var(--ease);
   pointer-events: none;
 }
-/* The pile lies on a table that leans back into the screen; the slides fall onto it in 3D. */
+/* The pile lies on a table that leans back into the screen; the slides fall onto it in 3D. The
+   stage ends where the pile does, so the copy beside it centres on the slides, not on empty
+   floor. */
 .lang-pile {
   position: absolute;
   left: 6%;
   right: 6%;
-  top: 9%;
+  top: 4%;
   aspect-ratio: 16 / 9;
   transform: rotateX(42deg);
   transform-origin: 50% 70%;
