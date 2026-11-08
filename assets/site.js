@@ -76,6 +76,7 @@
     document.title = get('meta.title');
     document.querySelector('.lang-current').textContent = lang.name;
     menu.querySelectorAll('li').forEach((li) => li.setAttribute('aria-selected', String(li.dataset.code === lang.code)));
+    chips.querySelectorAll('button').forEach((b) => (b.title = get('lang.pick')));
     setFonts(lang);
     typeOut();
     renderDesigns(lang.code);
@@ -153,22 +154,295 @@
     if (!menu.hidden && !e.target.closest('.lang')) toggle(false);
   });
 
-  // The language chips in the languages section light up one after another.
+  /* ---------- Languages: a pile of designed slides ---------- */
+  // Designs of the library's Elements, each drawn in one of the app's languages by the app's
+  // `/dev/review.html` (media/languages/<code>-<id>.webp), are thrown one by one onto a pile: two
+  // rounds of the sixteen languages, ordered so the scripts take turns. The chip of the language on
+  // top lights up; a chip throws a slide of its language, and a click on the pile throws the next.
+  const STACK = [
+    ['en', 'cover'], ['ja', 'definition'], ['ar', 'ramadan'], ['de', 'm-ipo'],
+    ['hi', 'm-diwali-threshold'], ['es', 'travel'], ['ko', 'm-hackathon'], ['he', 'roshhashana'],
+    ['fr', 'dinner'], ['ru', 'milestone'], ['zh-CN', 'nye'], ['it', 'winetasting'],
+    ['vi', 'm-vesak-moon'], ['tr', 'trek'], ['id', 'howto'], ['pt-BR', 'race'],
+    ['en', 'concert'], ['ja', 'm-quantumtalk'], ['ar', 'm-eid-sweets-tray'], ['de', 'm-datacenter'],
+    ['hi', 'm-sangeet-marigold-stage'], ['es', 'festival'], ['ko', 'standup'], ['he', 'statement'],
+    ['fr', 'exhibition'], ['ru', 'm-chipfab'], ['zh-CN', 'myth'], ['it', 'm-pitch-cover-kelp-depth'],
+    ['vi', 'yoga'], ['tr', 'theatre'], ['id', 'market'], ['pt-BR', 'summercamp'],
+  ];
+  // "Hello" in each language, risen behind the pile when its slide lands.
+  const HELLO = {
+    en: 'Hello', he: 'שלום', ar: 'مرحبًا', de: 'Hallo', es: 'Hola', fr: 'Bonjour', it: 'Ciao', 'pt-BR': 'Olá',
+    ru: 'Привет', tr: 'Merhaba', vi: 'Xin chào', id: 'Halo', hi: 'नमस्ते', ja: 'こんにちは', ko: '안녕하세요', 'zh-CN': '你好',
+  };
+  const SPARKS = ['#5eead4', '#a5b4fc', '#e9b8ff', '#ffd88a', '#ffffff'];
+  const EVERY = 2800;
+  const PILE = 7;
+
+  const stage = document.querySelector('.lang-stage');
+  const pile = stage.querySelector('.lang-pile');
+  const hello = stage.querySelector('.lang-hello');
+  const wave = pile.querySelector('.lang-wave');
   const chips = document.querySelector('.lang-chips');
+  stage.style.setProperty('--every', `${EVERY}ms`);
   LANGS.forEach((l) => {
     const li = document.createElement('li');
-    li.lang = l.code;
-    li.textContent = l.name;
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.lang = l.code;
+    b.dataset.code = l.code;
+    b.textContent = l.name;
+    li.appendChild(b);
     chips.appendChild(li);
   });
-  if (!reduced) {
-    let lit = 0;
-    setInterval(() => {
-      chips.children[lit]?.classList.remove('lit');
-      lit = (lit + 1) % chips.children.length;
-      chips.children[lit]?.classList.add('lit');
-    }, 900);
+  chips.style.setProperty('--every', `${EVERY}ms`);
+
+  const rand = (a, b) => a + Math.random() * (b - a);
+  // Each picture once, decoded before it is thrown, with the colour it lights the pile with.
+  const loaded = new Map();
+  function picture(i) {
+    if (!loaded.has(i)) {
+      const [code, id] = STACK[i];
+      const img = new Image();
+      img.src = `media/languages/${code}-${id}.webp`;
+      loaded.set(
+        i,
+        img.decode().then(
+          () => ({ src: img.src, tone: tone(img) }),
+          () => ({ src: img.src, tone: '' }),
+        ),
+      );
+    }
+    return loaded.get(i);
   }
+  // The most vivid of a few averaged patches of the slide, so the light takes its accent.
+  function tone(img) {
+    try {
+      const c = document.createElement('canvas');
+      c.width = 8;
+      c.height = 5;
+      const g = c.getContext('2d', { willReadFrequently: true });
+      g.drawImage(img, 0, 0, 8, 5);
+      const d = g.getImageData(0, 0, 8, 5).data;
+      let best = '';
+      let score = -1;
+      for (let k = 0; k < d.length; k += 4) {
+        const [r, gr, b] = [d[k], d[k + 1], d[k + 2]];
+        const hi = Math.max(r, gr, b);
+        const s = (hi - Math.min(r, gr, b)) * (hi / 255);
+        if (s > score) [score, best] = [s, `rgb(${r}, ${gr}, ${b})`];
+      }
+      return best;
+    } catch {
+      return '';
+    }
+  }
+
+  function greet(code) {
+    const old = [...hello.children];
+    const word = document.createElement('span');
+    word.lang = code;
+    word.dir = byCode[code].rtl ? 'rtl' : 'ltr';
+    word.textContent = HELLO[code];
+    hello.appendChild(word);
+    if (reduced) return old.forEach((w) => w.remove());
+    word.animate(
+      [
+        { opacity: 0, transform: 'translateY(38%) scale(0.94)', filter: 'blur(14px)' },
+        { opacity: 0.9, transform: 'none', filter: 'blur(0)' },
+      ],
+      { duration: 800, delay: 140, easing: 'cubic-bezier(0.2, 0.7, 0.1, 1)', fill: 'both' },
+    );
+    old.forEach((w) =>
+      w
+        .animate([{ opacity: 0.9 }, { opacity: 0, transform: 'translateY(-34%) scale(1.06)', filter: 'blur(14px)' }], {
+          duration: 380,
+          easing: 'ease-in',
+          fill: 'forwards',
+        })
+        .finished.then(() => w.remove(), () => w.remove()),
+    );
+  }
+
+  function light(code) {
+    chips.querySelectorAll('button').forEach((b) => {
+      b.classList.remove('lit');
+      if (b.dataset.code !== code) return;
+      void b.offsetWidth; // restart its timer
+      b.classList.add('lit');
+    });
+  }
+
+  // Older slides darken and sink as the pile grows; the oldest slips away.
+  function restack() {
+    const cards = [...pile.querySelectorAll('.lang-card:not(.gone)')];
+    cards.forEach((c, k) => {
+      const depth = cards.length - 1 - k;
+      c.style.setProperty('--depth', depth);
+      if (depth < PILE) return;
+      c.classList.add('gone');
+      c.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 600, fill: 'forwards' }).finished.then(() => c.remove(), () => c.remove());
+    });
+  }
+
+  // The thud: the pile jolts, a ring runs out under it, sparks fly from the slide's edges.
+  function impact(card, from) {
+    const cards = [...pile.querySelectorAll('.lang-card:not(.gone)')];
+    cards.slice(0, -1).reverse().slice(0, 4).forEach((c, k) => {
+      const f = 1 / (k + 1.2);
+      c.animate(
+        [
+          { transform: 'none' },
+          { transform: `translate(${from.x * -0.012 * f}px, ${7 * f}px) rotate(${rand(-1.6, 1.6) * f}deg)` },
+          { transform: 'none' },
+        ],
+        { duration: 520, easing: 'cubic-bezier(0.2, 0.8, 0.3, 1)' },
+      );
+    });
+    wave.animate(
+      [
+        { opacity: 0.85, transform: 'scale(0.62)' },
+        { opacity: 0, transform: 'scale(1.32)' },
+      ],
+      { duration: 820, easing: 'cubic-bezier(0.1, 0.7, 0.2, 1)' },
+    );
+    const w = pile.clientWidth;
+    const h = pile.clientHeight;
+    for (let k = 0; k < 30; k++) {
+      // A point on the slide's edge, and away from the middle.
+      const side = Math.random();
+      const t = rand(-0.5, 0.5);
+      const [x, y] = side < 0.35 ? [t * w, (Math.random() < 0.5 ? -0.5 : 0.5) * h] : side < 0.7 ? [t * w, 0.5 * h] : [(Math.random() < 0.5 ? -0.5 : 0.5) * w, t * h];
+      const len = Math.hypot(x, y) || 1;
+      const reach = rand(50, 170);
+      const [dx, dy] = [(x / len) * reach, (y / len) * reach];
+      const s = document.createElement('i');
+      s.className = 'lang-spark';
+      const streak = Math.random() < 0.45;
+      const size = rand(4, 9);
+      s.style.width = `${streak ? size * 3.2 : size}px`;
+      s.style.height = `${streak ? 2 : size}px`;
+      s.style.marginLeft = s.style.marginTop = `${-size / 2}px`;
+      s.style.background = Math.random() < 0.25 ? card.style.getPropertyValue('--tone') || SPARKS[0] : SPARKS[k % SPARKS.length];
+      s.style.boxShadow = `0 0 14px 2px ${s.style.background}`;
+      pile.appendChild(s);
+      const angle = (Math.atan2(dy, dx) * 180) / Math.PI;
+      s.animate(
+        [
+          { transform: `translate(${x}px, ${y}px) rotate(${angle}deg) scale(1)`, opacity: 1 },
+          { transform: `translate(${x + dx}px, ${y + dy + 26}px) rotate(${angle}deg) scale(0.2)`, opacity: 0 },
+        ],
+        { duration: rand(700, 1300), easing: 'cubic-bezier(0.15, 0.7, 0.3, 1)' },
+      ).finished.then(() => s.remove(), () => s.remove());
+    }
+  }
+
+  let next = 0;
+  async function throwSlide(i, still = false) {
+    const [code] = STACK[i];
+    const { src, tone: color } = await picture(i);
+    picture((i + 1) % STACK.length);
+    const card = document.createElement('figure');
+    card.className = 'lang-card';
+    card.dir = byCode[code].rtl ? 'rtl' : 'ltr';
+    if (color) card.style.setProperty('--tone', color);
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = '';
+    const tag = document.createElement('figcaption');
+    tag.lang = code;
+    tag.textContent = byCode[code].name;
+    card.append(img, tag);
+    // Where it comes to rest: a little off, a little turned.
+    card.style.translate = `${rand(-6, 6)}% ${rand(-6, 6)}%`;
+    card.style.rotate = `${rand(-9, 9)}deg`;
+    pile.appendChild(card);
+    const land = () => {
+      restack();
+      card.classList.add('landed');
+      if (color) stage.style.setProperty('--glow', color);
+      greet(code);
+      light(code);
+    };
+    if (still || reduced) {
+      land();
+      if (!still) card.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300 });
+      return;
+    }
+    // Where it is thrown from: off the pile, from any side but straight below, turning in the air.
+    const a = rand(-200, 20) * (Math.PI / 180);
+    const dist = stage.clientWidth * rand(0.85, 1.1);
+    const from = { x: Math.cos(a) * dist, y: Math.sin(a) * dist * 0.75 };
+    const spin = rand(22, 48) * (from.x > 0 ? 1 : -1);
+    const tilt = `rotateX(${rand(18, 40)}deg) rotateY(${rand(14, 32) * (from.x > 0 ? -1 : 1)}deg)`;
+    const at = 0.62;
+    const fly = card.animate(
+      [
+        { transform: `translate3d(${from.x}px, ${from.y}px, 280px) ${tilt} rotate(${spin}deg) scale(1.08)`, opacity: 0, filter: 'blur(6px) brightness(1.25)', easing: 'cubic-bezier(0.3, 0.1, 0.65, 1)' },
+        { opacity: 1, offset: 0.12 },
+        { transform: 'translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotate(0deg) scale(0.955)', filter: 'blur(0px) brightness(1)', offset: at, easing: 'cubic-bezier(0.3, 1.4, 0.5, 1)' },
+        { transform: 'translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotate(0deg) scale(1)', opacity: 1, filter: 'blur(0px) brightness(1)' },
+      ],
+      { duration: 1050 },
+    );
+    setTimeout(() => {
+      land();
+      impact(card, from);
+    }, 1050 * at);
+    await fly.finished.catch(() => {});
+  }
+
+  // Throws on a beat while the pile is on screen and the page is in front.
+  let seen = false;
+  let started = false;
+  let beat = 0;
+  function throwOnBeat(delay = EVERY) {
+    clearTimeout(beat);
+    if (!seen || document.hidden || reduced) return;
+    beat = setTimeout(() => {
+      throwSlide(next);
+      next = (next + 1) % STACK.length;
+      throwOnBeat();
+    }, delay);
+  }
+  function throwNow(i) {
+    throwSlide(i);
+    next = (i + 1) % STACK.length;
+    throwOnBeat();
+  }
+  new IntersectionObserver(
+    (entries) =>
+      entries.forEach((e) => {
+        seen = e.isIntersecting;
+        if (seen && !started && !reduced) {
+          // The pile builds itself in a burst the first time it is seen, from the page's language.
+          started = true;
+          const first = Math.max(0, STACK.findIndex(([code]) => code === root.lang));
+          [0, 1, 2].forEach((k) => setTimeout(() => throwSlide((first + k) % STACK.length), 250 + k * 420));
+          next = (first + 3) % STACK.length;
+          throwOnBeat(250 + 2 * 420 + EVERY);
+          return;
+        }
+        throwOnBeat();
+      }),
+    { threshold: 0.35 },
+  ).observe(stage);
+  document.addEventListener('visibilitychange', () => throwOnBeat());
+  if (reduced) {
+    // Without motion the pile is laid out at once; the chips and a click still change its top.
+    (async () => {
+      for (const k of [0, 1, 2, 3]) await throwSlide(k, true);
+    })();
+    next = 4;
+  }
+  picture(0);
+  stage.addEventListener('click', () => throwNow(next));
+  chips.addEventListener('click', (e) => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    // The next slide of that language, so a second click throws its other design.
+    const k = Array.from({ length: STACK.length }, (_, n) => (next + n) % STACK.length).find((n) => STACK[n][0] === b.dataset.code);
+    throwNow(k);
+  });
 
   /* ---------- Hero ---------- */
   // The hero's demo: three real runs, one after another. Each request types itself, is sent, and
@@ -311,7 +585,7 @@
   );
 
   // Looping clips play only while they are on screen.
-  const loops = document.querySelectorAll('.hero-window video, .lang-window video, .media-window video, .art-objects video');
+  const loops = document.querySelectorAll('.hero-window video, .media-window video, .art-objects video');
   const vio = new IntersectionObserver((entries) =>
     entries.forEach((e) => {
       const v = e.target;
