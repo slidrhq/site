@@ -1884,7 +1884,12 @@ p {
 }
 .foot-links {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 24px;
+}
+.foot-badge img {
+  display: block;
 }
 .foot-links a:hover {
   color: var(--fg);
