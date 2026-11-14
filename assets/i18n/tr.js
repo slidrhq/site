@@ -16,7 +16,7 @@
   'hero.onprem': 'Kurum içine kurun',
   'hero.trust1': 'Kurum içinde çalışır',
   'hero.trust2': 'Kendi yapay zekâ modelleriniz',
-  'hero.trust3': 'Sıfır telemetri',
+  'hero.trust3': 'Kurum içinde sıfır telemetri',
   'hero.prompt': '9 slaytlık bir plan hazırla: sınıflarımızda yapay zekâ',
   'hero.prompt2': '8 slaytlık bir rehber hazırla: Celile’de yürüyüş hafta sonu',
   'hero.prompt3': 'Yaz festivalimizin sponsorları için 7 slayt hazırla',

@@ -16,7 +16,7 @@
   'hero.onprem': 'On-Premises betreiben',
   'hero.trust1': 'Läuft On-Premises',
   'hero.trust2': 'Ihre eigenen KI-Modelle',
-  'hero.trust3': 'Null Telemetrie',
+  'hero.trust3': 'Null Telemetrie On-Premises',
   'hero.prompt': 'Erstelle 9 Folien: KI in unseren Klassenzimmern',
   'hero.prompt2': 'Erstelle 8 Folien: ein Wanderwochenende in Galiläa',
   'hero.prompt3': 'Erstelle 7 Folien für die Sponsoren unseres Sommerfestivals',

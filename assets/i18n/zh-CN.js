@@ -16,7 +16,7 @@
   'hero.onprem': '本地部署',
   'hero.trust1': '本地部署运行',
   'hero.trust2': '使用自有 AI 模型',
-  'hero.trust3': '零遥测',
+  'hero.trust3': '本地部署零遥测',
   'hero.prompt': '做 9 页幻灯片：AI 走进我们的课堂',
   'hero.prompt2': '做 8 页幻灯片：加利利徒步周末',
   'hero.prompt3': '做 7 页幻灯片：夏日音乐节赞助方案',

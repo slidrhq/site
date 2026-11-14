@@ -16,7 +16,7 @@
   'hero.onprem': 'Despliega on-prem',
   'hero.trust1': 'Funciona on-prem',
   'hero.trust2': 'Tus propios modelos de IA',
-  'hero.trust3': 'Cero telemetría',
+  'hero.trust3': 'Cero telemetría on-prem',
   'hero.prompt': 'Crea 9 diapositivas: la IA en nuestras aulas',
   'hero.prompt2': 'Crea 8 diapositivas: un fin de semana de senderismo en Galilea',
   'hero.prompt3': 'Crea 7 diapositivas para los patrocinadores de nuestro festival',

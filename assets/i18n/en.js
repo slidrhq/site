@@ -17,7 +17,7 @@
   'hero.onprem': 'Deploy on-prem',
   'hero.trust1': 'Runs on-prem',
   'hero.trust2': 'Your own AI models',
-  'hero.trust3': 'Zero telemetry',
+  'hero.trust3': 'No telemetry on-prem',
   'hero.prompt': 'Build a 9-slide plan: AI in our classrooms',
   'hero.prompt2': 'Build an 8-slide guide: a hiking weekend in the Galilee',
   'hero.prompt3': 'Build a 7-slide sponsor deck for our summer festival',

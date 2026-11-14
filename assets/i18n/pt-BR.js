@@ -16,7 +16,7 @@
   'hero.onprem': 'Implante on-premises',
   'hero.trust1': 'Roda on-premises',
   'hero.trust2': 'Seus próprios modelos de IA',
-  'hero.trust3': 'Zero telemetria',
+  'hero.trust3': 'Zero telemetria on-premises',
   'hero.prompt': 'Crie 9 slides: IA nas nossas salas de aula',
   'hero.prompt2': 'Crie 8 slides: um fim de semana de trilhas na Galileia',
   'hero.prompt3': 'Crie 7 slides para os patrocinadores do nosso festival',

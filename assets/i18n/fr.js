@@ -16,7 +16,7 @@
   'hero.onprem': 'Déployer sur site',
   'hero.trust1': 'Fonctionne sur site',
   'hero.trust2': 'Vos propres modèles d’IA',
-  'hero.trust3': 'Zéro télémétrie',
+  'hero.trust3': 'Zéro télémétrie sur site',
   'hero.prompt': 'Crée 9 diapositives : l’IA dans nos classes',
   'hero.prompt2': 'Crée 8 diapositives : un week-end de randonnée en Galilée',
   'hero.prompt3': 'Crée 7 diapositives pour les sponsors de notre festival d’été',

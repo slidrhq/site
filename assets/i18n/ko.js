@@ -16,7 +16,7 @@
   'hero.onprem': '온프레미스로 배포',
   'hero.trust1': '온프레미스 실행',
   'hero.trust2': '우리 AI 모델 그대로',
-  'hero.trust3': '텔레메트리 제로',
+  'hero.trust3': '온프레미스에서 텔레메트리 제로',
   'hero.prompt': '슬라이드 9장 만들어 줘: 우리 교실의 AI',
   'hero.prompt2': '슬라이드 8장 만들어 줘: 갈릴리 주말 하이킹',
   'hero.prompt3': '슬라이드 7장 만들어 줘: 여름 페스티벌 후원 제안',

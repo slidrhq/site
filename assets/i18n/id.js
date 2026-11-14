@@ -16,7 +16,7 @@
   'hero.onprem': 'Pasang on-premise',
   'hero.trust1': 'Berjalan on-premise',
   'hero.trust2': 'Model AI Anda sendiri',
-  'hero.trust3': 'Nol telemetri',
+  'hero.trust3': 'Nol telemetri on-premise',
   'hero.prompt': 'Buat 9 slide: AI di kelas kita',
   'hero.prompt2': 'Buat 8 slide: akhir pekan mendaki di Galilea',
   'hero.prompt3': 'Buat 7 slide untuk sponsor festival musim panas kita',

@@ -16,7 +16,7 @@
   'hero.onprem': 'Triển khai tại chỗ',
   'hero.trust1': 'Chạy tại chỗ',
   'hero.trust2': 'Mô hình AI của riêng bạn',
-  'hero.trust3': 'Không thu thập dữ liệu',
+  'hero.trust3': 'Không thu thập dữ liệu khi chạy tại chỗ',
   'hero.prompt': 'Tạo 9 slide: AI trong lớp học của chúng ta',
   'hero.prompt2': 'Tạo 8 slide: cuối tuần leo núi ở Galilee',
   'hero.prompt3': 'Tạo 7 slide mời tài trợ cho lễ hội mùa hè của chúng ta',
