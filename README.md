@@ -31,6 +31,8 @@ The site has no build and no checks. Publish the repository as it is, to any sta
 
 Until 2026-10-20 the site was `apps/website` of [slidrhq/app](https://github.com/slidrhq/app); its history came with it. "The app" and "the dev server" above are that repository and its `pnpm dev`.
 
+The "Launched on Fazier" badge in the footer is a condition of the free listing on fazier.com: the comments and the badge are done, and the listing waits until the domain's Ahrefs Domain Rating is above 0 (it was 0 on 2026-11-14). Keep the badge until the listing is reviewed (`marketing/launch-posts.md` §5 of the working folder).
+
 ## Publishing
 
 The site runs on Cloudflare as the Worker `www` (https://www.slidr.workers.dev), which serves the files of this repository (`wrangler.jsonc`; `.assetsignore` leaves out the rest). `.github/workflows/deploy.yml` publishes it on every push to `main`, and you can run it by hand from the Actions tab. The workflow needs two repository secrets: `CLOUDFLARE_API_TOKEN`, a token with the "Edit Cloudflare Workers" template, and `CLOUDFLARE_ACCOUNT_ID`.
